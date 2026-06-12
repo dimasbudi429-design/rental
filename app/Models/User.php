@@ -10,6 +10,10 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    public function bookings()
+{
+    return $this->hasMany(Booking::class);
+}
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
