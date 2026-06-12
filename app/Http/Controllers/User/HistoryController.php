@@ -9,11 +9,14 @@ class HistoryController extends Controller
 {
     public function index()
     {
-        $bookings = Booking::with('playstation')
-            ->where('user_id', auth()->id())
-            ->latest()
-            ->get();
+        $bookings = Booking::with([
+            'playstation',
+            'transaction'
+        ])
+        ->where('user_id', auth()->id())
+        ->latest()
+        ->get();
 
-        return view('user.booking.history', compact('bookings'));
+        return view('user.history', compact('bookings'));
     }
 }

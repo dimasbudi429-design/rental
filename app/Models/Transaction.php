@@ -7,9 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
-    public function booking()
-{
-    return $this->belongsTo(Booking::class);
-}
     use HasFactory;
+
+    protected $fillable = [
+
+        'booking_id',
+
+        'total_price',
+
+        'payment_status',
+
+        'payment_proof'
+
+    ];
+
+    public function booking()
+    {
+        return $this->belongsTo(
+            Booking::class
+        );
+    }
 }

@@ -1,36 +1,111 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rental PS</title>
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        body{
+            background:#0f172a;
+            color:white;
+        }
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+        nav{
+            background:#1e293b;
+            padding:20px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
 
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
+        nav .left a,
+        nav .right a{
+            color:white;
+            text-decoration:none;
+            margin-right:20px;
+            font-weight:bold;
+        }
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
-        </div>
-    </body>
+        nav button{
+            padding:8px 16px;
+            border:none;
+            border-radius:6px;
+            background:#ef4444;
+            color:white;
+            cursor:pointer;
+        }
+
+        .container{
+            width:90%;
+            margin:auto;
+            padding:30px 0;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+            background:white;
+            color:black;
+        }
+
+        table th,
+        table td{
+            padding:12px;
+            border:1px solid #ddd;
+        }
+
+        input,
+        select{
+            width:100%;
+            padding:10px;
+            margin:10px 0;
+            border-radius:6px;
+            border:none;
+        }
+
+        .btn{
+            background:#06b6d4;
+            color:white;
+            padding:10px 20px;
+            border:none;
+            border-radius:6px;
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="left">
+        <a href="/">Rental PS</a>
+    </div>
+
+    <div class="right">
+        @auth
+            <span style="margin-right:20px;">
+                Halo, {{ auth()->user()->name }}
+            </span>
+
+            <form method="POST" action="/logout" style="display:inline;">
+                @csrf
+                <button type="submit">Logout</button>
+            </form>
+        @endauth
+    </div>
+</nav>
+
+<div class="container">
+    @yield('content')
+</div>
+
+</body>
 </html>

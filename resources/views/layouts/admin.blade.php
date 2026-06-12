@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <h2>ADMIN PANEL</h2>
 
 <a href="/admin/dashboard">Dashboard</a>
@@ -12,4 +13,5 @@
 <hr>
 
 @yield('admin-content')
+
 @endsection

@@ -4,60 +4,71 @@ namespace App\Services;
 
 use App\Models\Booking;
 use App\Models\Transaction;
-use App\Models\Timer;
 use App\Models\Playstation;
+use App\Models\Timer;
+
 use Carbon\Carbon;
 
 class BookingService
 {
     public function createBooking($data)
     {
-        $start = Carbon::parse($data['start_time']);
-        $end = $start->copy()->addHours($data['duration']);
+        $playstation = Playstation::findOrFail(
+            $data['playstation_id']
+        );
 
-        // 🔥 CEK BENTROK
-        $conflict = Booking::where('playstation_id', $data['playstation_id'])
-            ->where(function ($q) use ($start, $end) {
-                $q->where('start_time', '<', $end)
-                  ->where('end_time', '>', $start);
-            })
-            ->exists();
+        $start = Carbon::now();
 
-        if ($conflict) {
-            return ['error' => 'Jadwal sudah dipakai!'];
-        }
+        $end = Carbon::now()->addHours(
+            $data['duration']
+        );
 
-        // 💰 HITUNG HARGA
-        $ps = Playstation::find($data['playstation_id']);
-        $total = $ps->price_per_hour * $data['duration'];
+        $total =
+            $playstation->price_per_hour *
+            $data['duration'];
 
-        // 📅 SIMPAN BOOKING
         $booking = Booking::create([
-            'user_id' => $data['user_id'],
-            'playstation_id' => $data['playstation_id'],
+
+            'user_id' => auth()->id(),
+
+            'playstation_id' =>
+                $data['playstation_id'],
+
             'start_time' => $start,
+
             'end_time' => $end,
+
             'duration' => $data['duration'],
+
             'status' => 'pending'
+
         ]);
 
-        // 💵 BUAT TRANSAKSI
         Transaction::create([
+
             'booking_id' => $booking->id,
+
             'total_price' => $total,
-            'payment_method' => 'transfer',
+
             'payment_status' => 'unpaid'
+
         ]);
 
-        // ⏱️ BUAT TIMER
         Timer::create([
+
             'booking_id' => $booking->id,
+
             'start_time' => $start,
+
             'end_time' => $end,
-            'remaining_time' => $end->timestamp - now()->timestamp,
+
+            'remaining_time' =>
+                $data['duration'] * 3600,
+
             'status' => 'running'
+
         ]);
 
-        return ['success' => 'Booking berhasil'];
+        return $booking;
     }
 }

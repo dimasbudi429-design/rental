@@ -1,21 +1,33 @@
 @extends('layouts.admin')
 
 @section('admin-content')
-<h3>Tambah PS</h3>
 
-<form method="POST" action="/admin/playstations">
-@csrf
+<h1>Tambah PlayStation</h1>
 
-<input type="text" name="name" placeholder="Nama PS"><br><br>
+<form method="POST" action="/admin/playstations" style="
+    margin-top:20px;
+    background:#1e293b;
+    padding:30px;
+    border-radius:12px;
+">
+    @csrf
 
-<select name="type">
-    <option>PS4</option>
-    <option>PS5</option>
-</select><br><br>
+    <label>Nama PS</label>
+    <input type="text" name="name" placeholder="Contoh: PS 1" required>
 
-<input type="number" name="price_per_hour" placeholder="Harga"><br><br>
+    <label>Tipe</label>
+    <select name="type" required>
+        <option value="">-- pilih --</option>
+        <option value="PS4">PS4</option>
+        <option value="PS5">PS5</option>
+    </select>
 
-<button type="submit">Simpan</button>
+    <label>Harga / Jam</label>
+    <input type="number" name="price_per_hour" placeholder="10000" required>
 
+    <button class="btn" type="submit">
+        Simpan
+    </button>
 </form>
+
 @endsection

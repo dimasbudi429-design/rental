@@ -1,25 +1,52 @@
 @extends('layouts.admin')
 
 @section('admin-content')
-<h3>Data PS</h3>
 
-<a href="/admin/playstations/create">Tambah PS</a>
+<h1 style="margin-bottom:20px;">Data PlayStation</h1>
 
-<table border="1">
-<tr>
-    <th>Nama</th>
-    <th>Tipe</th>
-    <th>Status</th>
-    <th>Harga</th>
-</tr>
+<a href="/admin/playstations/create" class="btn">
+    + Tambah PlayStation
+</a>
 
-@foreach($ps as $p)
-<tr>
-    <td>{{ $p->name }}</td>
-    <td>{{ $p->type }}</td>
-    <td>{{ $p->status }}</td>
-    <td>{{ $p->price_per_hour }}</td>
-</tr>
-@endforeach
+@if(session('success'))
+    <div style="
+        background:#16a34a;
+        padding:15px;
+        border-radius:8px;
+        margin-top:20px;
+        margin-bottom:20px;
+    ">
+        {{ session('success') }}
+    </div>
+@endif
+
+<table>
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Nama PS</th>
+            <th>Tipe</th>
+            <th>Status</th>
+            <th>Harga / Jam</th>
+        </tr>
+    </thead>
+    <tbody>
+        @forelse($ps as $item)
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $item->name }}</td>
+                <td>{{ $item->type }}</td>
+                <td>{{ $item->status }}</td>
+                <td>Rp {{ number_format($item->price_per_hour,0,',','.') }}</td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="5" style="text-align:center;">
+                    Belum ada data PlayStation
+                </td>
+            </tr>
+        @endforelse
+    </tbody>
 </table>
+
 @endsection

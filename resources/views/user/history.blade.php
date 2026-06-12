@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transactions</title>
+    <title>History Booking</title>
 
     <style>
 
@@ -12,6 +12,10 @@
             color:white;
             font-family:Arial;
             padding:30px;
+        }
+
+        h1{
+            margin-bottom:20px;
         }
 
         table{
@@ -34,13 +38,12 @@
             background:#111827;
         }
 
-        button{
-            background:lime;
+        a{
+            background:cyan;
             color:black;
-            border:none;
-            padding:8px 14px;
+            padding:8px 12px;
+            text-decoration:none;
             border-radius:5px;
-            cursor:pointer;
             font-weight:bold;
         }
 
@@ -49,27 +52,19 @@
 </head>
 <body>
 
-<h1>ADMIN TRANSACTIONS</h1>
+<h1>USER HISTORY</h1>
 
 <table>
 
     <tr>
-
         <th>No</th>
-
-        <th>User</th>
-
         <th>PlayStation</th>
-
-        <th>Total</th>
-
+        <th>Durasi</th>
         <th>Status</th>
-
-        <th>Aksi</th>
-
+        <th>Detail</th>
     </tr>
 
-    @foreach($transactions as $transaction)
+    @forelse($bookings as $booking)
 
     <tr>
 
@@ -78,51 +73,38 @@
         </td>
 
         <td>
-            {{ $transaction->booking->user->name }}
+            {{ $booking->playstation->name }}
         </td>
 
         <td>
-            {{ $transaction->booking->playstation->name }}
+            {{ $booking->duration }} Jam
         </td>
 
         <td>
-            Rp {{ number_format($transaction->total_price,0,',','.') }}
-        </td>
-
-        <td>
-            {{ $transaction->payment_status }}
+            {{ $booking->status }}
         </td>
 
         <td>
 
-            @if($transaction->payment_status == 'unpaid')
-
-            <form
-                action="/admin/transactions/{{ $transaction->id }}/verify"
-                method="POST"
-            >
-
-                @csrf
-
-                <button type="submit">
-
-                    Approve
-
-                </button>
-
-            </form>
-
-            @else
-
-                Sudah Dibayar
-
-            @endif
+            <a href="/user/booking/{{ $booking->id }}">
+                Lihat
+            </a>
 
         </td>
 
     </tr>
 
-    @endforeach
+    @empty
+
+    <tr>
+
+        <td colspan="5">
+            Belum ada booking
+        </td>
+
+    </tr>
+
+    @endforelse
 
 </table>
 

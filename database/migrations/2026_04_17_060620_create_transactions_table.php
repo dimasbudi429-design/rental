@@ -8,32 +8,34 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('transactions', function (Blueprint $table) {
-    $table->id();
 
-    $table->foreignId('booking_id')->constrained()->onDelete('cascade');
+            $table->id();
 
-    $table->integer('total_price');
-    $table->enum('payment_method', ['cash','transfer']);
-    $table->enum('payment_status', ['unpaid','waiting_verification','paid'])->default('unpaid');
+            $table->foreignId('booking_id')
+                ->constrained()
+                ->onDelete('cascade');
 
-    $table->string('proof_of_payment')->nullable();
+            $table->integer('total_price');
 
-    $table->timestamps();
-});
+            $table->string('payment_status')
+                ->default('unpaid');
+
+            $table->string('proof_of_payment')
+                ->nullable();
+
+            $table->timestamps();
+
+        });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('transactions');
     }

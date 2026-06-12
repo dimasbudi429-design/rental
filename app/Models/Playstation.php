@@ -7,9 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Playstation extends Model
 {
-    public function bookings()
-{
-    return $this->hasMany(Booking::class);
-}
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'type',
+        'status',
+        'price_per_hour'
+    ];
 }
